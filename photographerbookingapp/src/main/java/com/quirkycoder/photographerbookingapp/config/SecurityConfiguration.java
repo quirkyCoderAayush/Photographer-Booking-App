@@ -36,6 +36,7 @@ public class SecurityConfiguration {
 				.permitAll()
 				.requestMatchers("/api/v1/admin").hasAnyAuthority(Role.ADMIN.name())
 				.requestMatchers("/api/v1/user").hasAnyAuthority(Role.USER.name())
+				//.requestMatchers("/api/v1/user/all").hasAnyAuthority(Role.ADMIN.name())
 				.requestMatchers("/api/v1/photographer").hasAnyAuthority(Role.PHOTOGRAPHER.name())
 				.anyRequest().authenticated())
 		.sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -45,8 +46,8 @@ public class SecurityConfiguration {
 		return http.build();
 	}
 
-	@Bean
-    public AuthenticationProvider authenticationProvider() {
+    @Bean
+    AuthenticationProvider authenticationProvider() {
     	DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
 		authenticationProvider.setUserDetailsService(userService.userDetailsService());
 		authenticationProvider.setPasswordEncoder(passwordEncoder());
@@ -57,9 +58,9 @@ public class SecurityConfiguration {
     PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
-	
-	@Bean
-	public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception{
+
+    @Bean
+    AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception{
 		return config.getAuthenticationManager();
 	}
 
